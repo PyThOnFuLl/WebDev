@@ -1,25 +1,26 @@
 <?php
 
-require '../vendor/autoload.php';
+declare(strict_types=1);
+
+require_once('vendor/autoload.php');
+
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
+$dotenv->load();
 
 
 class Database
 {
-    private $host;
-    private $db_name;
-    private $username;
-    private $password;
-    public $conn;
+    private string $host = 'localhost';
+    private string $db_name = 'school_x';
+    private string $username = 'root';
+    private string $password = 'TRaPbOOm3005!';
+    public ?PDO $conn = null;
 
     public function getConnection(): ?PDO
     {
 
         $dotenv = Dotenv\Dotenv::createImmutable('../');
         $dotenv->load();
-        $this->db_name = $_ENV['DATABASE_NAME'];
-        $this->host = $_ENV['MYSQL_HOST'];
-        $this->username = $_ENV['MYSQL_USER'];
-        $this->password = $_ENV['MYSQL_PASSWORD'];
 
         $this->conn = null;
 

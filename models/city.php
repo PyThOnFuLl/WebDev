@@ -1,24 +1,22 @@
 <?php
 
-class User
+class City
 {
 
     private ?PDO $conn;
-    private string $table_name = "user";
+    private string $table_name = "city";
     public int $id;
     public string $name;
-    public string $city_id;
-    public string $username;
 
     public function __construct($db)
     {
         $this->conn = $db;
     }
 
-    function get(): bool|PDOStatement
+    function get(): bool
     {
 
-        $query = "SELECT user.id, username, user.name as name, city.name as city FROM " . $this->table_name . " INNER JOIN city ON ". $this->table_name . ".city_id = city.id;";
+        $query = "SELECT * FROM " . $this->table_name . " ORDER BY id DESC";
 
         $stmt = $this->conn->prepare($query);
 
@@ -27,20 +25,16 @@ class User
         return $stmt;
     }
 
-    function create(): bool|PDOStatement
+    function create(): bool
     {
 
-        $query = "INSERT INTO " . $this->table_name . " SET name=:name, username=:username, city_id=:city_id";
+        $query = "INSERT INTO " . $this->table_name . " SET name=:name";
 
         $stmt = $this->conn->prepare($query);
 
         $this->name = htmlspecialchars(strip_tags($this->name));
-        $this->city_id = htmlspecialchars(strip_tags($this->city_id));
-        $this->username = htmlspecialchars(strip_tags($this->username));
 
         $stmt->bindParam(":name", $this->name);
-        $stmt->bindParam(":city_id", $this->city_id);
-        $stmt->bindParam(":username", $this->username);
 
         if ($stmt->execute()) {
             return true;
@@ -49,7 +43,7 @@ class User
         return false;
     }
 
-    function delete(): bool|PDOStatement
+    function delete(): bool
     {
         $query = "DELETE FROM " . $this->table_name ." WHERE id=:id;";
 
@@ -64,9 +58,9 @@ class User
         return $stmt;
     }
 
-    function update(): bool|PDOStatement
+    function update(): bool
     {
-        $query = " UPDATE user SET name=:name, username=:username, city_id=:city_id " . " WHERE id=:id;";
+        $query = " UPDATE ". $this->table_name . " SET name=:name, username=:username, city_id=:city_id" . " WHERE id=:id;";
 
 
         $stmt = $this->conn->prepare($query);

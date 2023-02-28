@@ -17,11 +17,13 @@ $data = json_decode(file_get_contents("php://input"));
 
 if (
     !empty($data->name) &&
-    !empty($data->city_id)
+    !empty($data->city_id) &&
+    !empty($data->username)
 ) {
 
     $user->name = $data->name;
     $user->city_id = $data->city_id;
+    $user->username = $data->username;
 
     if ($user->create()) {
 
